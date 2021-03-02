@@ -60,23 +60,21 @@ Perform a train-test split with a test set of 20%.
 
 ```python
 # Import train_test_split from sklearn.model_selection
-from sklearn.model_selection import train_test_split
+
 ```
 
 
 ```python
 # Split the data into training and test sets (assign 20% to test set)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
+
 ```
 
 
 ```python
 # A brief preview of train-test split
 print(len(X_train), len(X_test), len(y_train), len(y_test))
+
 ```
-
-    1168 292 1168 292
-
 
 ### Fit the model
 
@@ -84,11 +82,7 @@ Fit a linear regression model and apply the model to make predictions on test se
 
 
 ```python
-from sklearn.linear_model import LinearRegression
-linreg = LinearRegression()
-
-linreg.fit(X_train, y_train)
-y_hat_test = linreg.predict(X_test)
+# Your code here
 ```
 
 ### Residuals and MSE
@@ -97,19 +91,8 @@ Calculate the residuals and the mean squared error on the test set
 
 
 ```python
-from sklearn.metrics import mean_squared_error
-test_residuals = y_hat_test - y_test
-
-test_mse = mean_squared_error(y_test, y_hat_test)
-test_mse
+# Your code here
 ```
-
-
-
-
-    0.16462930868554446
-
-
 
 ## Cross-Validation: let's build it from scratch!
 
@@ -123,36 +106,22 @@ We want the folds to be a list of subsets of data!
 ```python
 def kfolds(data, k):
     # Force data as pandas DataFrame
-    data = pd.DataFrame(data)
-    num_observations = len(data)
-    fold_size = num_observations//k
-    leftovers = num_observations%k
-    folds = []
-    start_obs = 0
-    for fold_n in range(1,k+1):
-        if fold_n <= leftovers:
-            #Fold Size will be 1 larger to account for leftovers
-            fold =  data.iloc[start_obs : start_obs+fold_size+1] 
-            folds.append(fold)
-            start_obs +=  fold_size + 1
-        else:
-            fold =  data.iloc[start_obs : start_obs+fold_size] 
-            folds.append(fold)
-            start_obs +=  fold_size
-            
-    return folds 
+    # add 1 to fold size to account for leftovers           
+    return None
 ```
 
 ### Apply it to the Ames Housing data
 
 
 ```python
-ames_data = pd.concat([X.reset_index(drop=True), y], axis=1)
+# Make sure to concatenate the data again
+ames_data = None
 ```
 
 
 ```python
-ames_folds = kfolds(ames_data, 5)
+# Apply kfolds() to ames_data with 5 folds
+
 ```
 
 ### Perform a linear regression for each fold and calculate the training and test error
@@ -167,24 +136,15 @@ k=5
 
 for n in range(k):
     # Split in train and test for the fold
-    train = pd.concat([fold for i, fold in enumerate(ames_folds) if i!=n])
-    test = ames_folds[n]
+    train = None
+    test = None
     # Fit a linear regression model
-    linreg.fit(X_train, y_train)
-    #Evaluate Train and Test Errors
-    y_hat_train = linreg.predict(X_train)
-    y_hat_test = linreg.predict(X_test)
-    train_residuals = y_hat_train - y_train
-    test_residuals = y_hat_test - y_test
-    train_errs.append(np.mean(train_residuals.astype(float)**2))
-    test_errs.append(np.mean(test_residuals.astype(float)**2))
-print(train_errs)
-print(test_errs)
+    
+    # Evaluate Train and Test errors
+
+# print(train_errs)
+# print(test_errs)
 ```
-
-    [0.16204746782850243, 0.16204746782850243, 0.16204746782850243, 0.16204746782850243, 0.16204746782850243]
-    [0.16462930868554448, 0.16462930868554448, 0.16462930868554448, 0.16462930868554448, 0.16462930868554448]
-
 
 ## Cross-Validation using Scikit-Learn
 
@@ -192,27 +152,15 @@ This was a bit of work! Now, let's perform 5-fold cross-validation to get the me
 
 
 ```python
-from sklearn.metrics import mean_squared_error, make_scorer
-from sklearn.model_selection import cross_val_score
-
-mse = make_scorer(mean_squared_error)
-
-cv_5_results = cross_val_score(linreg, X, y, cv=5, scoring=mse)
+# Your code here
 ```
 
 Next, calculate the mean of the MSE over the 5 cross-validation and compare and contrast with the result from the train-test split case.
 
 
 ```python
-cv_5_results.mean()
+# Your code here
 ```
-
-
-
-
-    0.17702834210001087
-
-
 
 ##  Summary 
 
